@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
       fetchImages('image2', nextPage);
   
       function fetchImages(containerId, pageNum) {
-        fetch('http://localhost:2202/getpage', {
+        fetch('https://textbookapi.joshnewman6.com/getpage', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -358,7 +358,7 @@ function handleImageClick(event) {
   var jsonData = JSON.stringify(data);
   console.log('JSON Data: ' + jsonData);
 
-  fetch('http://localhost:2202/addcomment', {
+  fetch('https://textbookapi.joshnewman6.com/addcomment', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'
