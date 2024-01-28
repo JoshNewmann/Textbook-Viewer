@@ -103,10 +103,6 @@ document.addEventListener('DOMContentLoaded', () => {
         .split('; ')
         .find((row) => row.startsWith('password='));
       const password = passwordCookie ? passwordCookie.split('=')[1] : null;
-  
-      if (!password) {
-        const passwordPrompt = prompt('Please enter the password:');
-        document.cookie = `password=${passwordPrompt}; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/`;
       }
   
       const bookType = methodsButton.classList.contains('active-button') ? 'Methods' : 'Spec';
