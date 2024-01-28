@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+  <meta charset="UTF-8" />
+  <title>Textbook Viewer</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <div class="left-buttons">
+      <button id="methods-button" class="active-button">Methods</button>
+      <button id="spec-button">Spec</button>
+    </div>
+
+    <select class="chapters" name="Methods Chapters" id="methodschapters">
+      <option value="1">Go to Chapter</option>
+      <option value="9">Chapter 1: Functions</option>
+      <option value="27">Chapter 2: Differential Calculus</option>
+      <option value="59">Chapter 3: Applications of Differential Calculus</option>
+      <option value="97">Chapter 4: Integration</option>
+      <option value="127">Chapter 5: Applications of Integration</option>
+      <option value="153">Chapter 6: Statistics</option>
+      <option value="183">Chapter 7: Discrete Random Variables</option>
+      <option value="221">Chapter 8: Continuous Random Variables</option>
+      <option value="253">Chapter 9: Sampling and Confidence Intervals</option>
+      <option value="297">Answers</option>
+      <option value="334">Index</option>
+    </select>
+
+    <select class="chapters" name="Spec Chapters" id="specchapters">
+        <option value="1">Go to Chapter</option>
+        <option value="20">Didn't</option>
+        <option value="37">Get</option>
+        <option value="99">This</option>
+        <option value="102">Far</option>
+    </select>
+
+    <div class="right-buttons">
+      <button id="download-button">Download</button>
+    </div>
+  </header>
+
+  <div class="backgrounddiv">
+    <div class="imagecontainer" id="image"></div>
+    <div class="imagecontainer" id="image2" style="display: none;"></div>
+  </div>
+
+  <div class="bottom-buttons">
+
+  <div class="left-controls">
+    <button id="one-page-button" class="active-button">1 Page</button>
+    <button id="two-page-button">2 Pages</button>
+  </div>
+
+  <div class="middle-controls">
+    <div class="bottom-controls">
+      <div class="two-buttons">
+      <div class="button-container">
+        <button class="centre-button" id="comments-button">💬</button>
+      </div>
+      <div class="button-container">
+        <button class="centre-button" id="fullscreen-button">🗖</button>
+      </div>
+      </div>
+      <div class="input-container">
+        <label for="page-number">Page: </label>
+        <input type="number" id="page-number" value="1" name="page-number" min="1" max="500" />
+      </div>
+      <div class="two-buttons">
+        <div class="button-container">
+          <button class="centre-button" id="page-down-button">▼</button>
+        </div>
+      <div class="button-container">
+        <button class="centre-button" id="page-up-button">▲</button>
+      </div>
+    </div>
+    </div>
+  </div>
+  
+  
+  <div class="right-controls-container">
+    <div class="right-controls">
+      <button id="zoom-out-button">-</button>
+      <button id="zoom-in-button">+</button>
+    </div>
+  </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
