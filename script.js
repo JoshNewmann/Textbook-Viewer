@@ -103,6 +103,9 @@ document.addEventListener('DOMContentLoaded', () => {
         .split('; ')
         .find((row) => row.startsWith('password='));
       const password = passwordCookie ? passwordCookie.split('=')[1] : null;
+  
+      if (!password) {
+        console.log("No Password");
       }
   
       const bookType = methodsButton.classList.contains('active-button') ? 'Methods' : 'Spec';
