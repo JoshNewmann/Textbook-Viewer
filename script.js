@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
       fetchImages('image2', nextPage);
   
       function fetchImages(containerId, pageNum) {
-        fetch('https://safetychecker.quinquadcraft.org/textbookapi/getpage', {
+        fetch('https://textbookapi.quinquadcraft.org/getpage', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -357,7 +357,7 @@ function handleImageClick(event) {
   var jsonData = JSON.stringify(data);
   console.log('JSON Data: ' + jsonData);
 
-  fetch('https://safetychecker.quinquadcraft.org/textbookapi/addcomment', {
+  fetch('https://textbookapi.quinquadcraft.org/addcomment', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'
