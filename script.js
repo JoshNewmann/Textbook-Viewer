@@ -5,7 +5,6 @@ let book = 'methods';
 document.addEventListener('DOMContentLoaded', () => {
     const methodsButton = document.getElementById('methods-button');
     const specButton = document.getElementById('spec-button');
-    const downloadButton = document.getElementById('download-button');
     const pageNumberInput = document.getElementById('page-number');
     const onePageButton = document.getElementById('one-page-button');
     const twoPageButton = document.getElementById('two-page-button');
@@ -36,10 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
       methodschapters.style.display = 'none';
       book = 'spec';
       handleLoadImages();
-    });
-  
-    downloadButton.addEventListener('click', () => {
-      handleDownload();
     });
   
     pageNumberInput.addEventListener('input', () => {
@@ -180,11 +175,6 @@ document.addEventListener('DOMContentLoaded', () => {
       currentPage = Math.min(500, Math.max(1, currentPage));
     
       pageNumberInput.value = currentPage;
-    }
-
-    function handleDownload() {
-      // Add download functionality
-      // You can use the existing logic for fetching data and handling the download
     }
 
     specchapters.style.display = 'none';
