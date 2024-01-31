@@ -93,59 +93,79 @@ document.addEventListener('DOMContentLoaded', () => {
       handleLoadImages(pageNumber, nextPageNumber);
     });
   
-    function handleLoadImages(pageNumber, nextPageNumber) {
-      const passwordCookie = document.cookie
+// Declare an AbortController instance
+let imageFetchController = new AbortController();
+
+function handleLoadImages(pageNumber, nextPageNumber) {
+    // Abort ongoing fetch requests
+    imageFetchController.abort();
+    imageFetchController = new AbortController();
+
+    const passwordCookie = document.cookie
         .split('; ')
         .find((row) => row.startsWith('password='));
-      const password = passwordCookie ? passwordCookie.split('=')[1] : null;
-  
-      if (!password) {
+    const password = passwordCookie ? passwordCookie.split('=')[1] : null;
+
+    if (!password) {
         console.log("No Password");
-      }
-  
-      const bookType = methodsButton.classList.contains('active-button') ? 'Methods' : 'Spec';
-      const currentPageNumber = pageNumber || pageNumberInput.value;
-      const nextPage = nextPageNumber || parseInt(currentPageNumber, 10) + 1;
-  
-      localStorage.setItem(bookType, currentPageNumber);
-  
-      fetchImages('image', currentPageNumber);
-      fetchImages('image2', nextPage);
-  
-      function fetchImages(containerId, pageNum) {
-        fetch('https://textbookapi.quinquadcraft.org/getpage', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            password,
-            page: `page${pageNum}`,
-            bookType,
-          }),
-        })
-          .then((response) => {
-            if (response.status === 401) {
-              throw new Error('Unauthorized');
-            } else if (response.status === 404) {
-              throw new Error('Page not found');
-            } else {
-              return response.blob();
-            }
-          })
-          .then((blob) => {
-            const img = document.createElement('img');
-            img.src = URL.createObjectURL(blob);
-  
-            const containerDiv = document.getElementById(containerId);
-            containerDiv.innerHTML = '';
-            containerDiv.appendChild(img.cloneNode(true));
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      }
     }
+
+    const bookType = methodsButton.classList.contains('active-button') ? 'Methods' : 'Spec';
+    const currentPageNumber = pageNumber || pageNumberInput.value;
+    const nextPage = nextPageNumber || parseInt(currentPageNumber, 10) + 1;
+
+    localStorage.setItem(bookType, currentPageNumber);
+
+    // Keep track of the current requested page number
+    const currentRequestedPage = currentPageNumber;
+
+    fetchImages('image', currentPageNumber);
+    fetchImages('image2', nextPage);
+
+    function fetchImages(containerId, pageNum) {
+        // Create a new AbortSignal for this fetch request
+        const imageFetchSignal = imageFetchController.signal;
+
+        fetch('https://textbookapi.quinquadcraft.org/getpage', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    password,
+                    page: `page${pageNum}`,
+                    bookType,
+                }),
+                signal: imageFetchSignal // Pass the signal to the fetch request
+            })
+            .then((response) => {
+                if (response.status === 401) {
+                    throw new Error('Unauthorized');
+                } else if (response.status === 404) {
+                    throw new Error('Page not found');
+                } else {
+                    return response.blob();
+                }
+            })
+            .then((blob) => {
+                // Check if the fetched page matches the current requested page
+                if (pageNum.toString() === currentRequestedPage.toString()) {
+                    const img = document.createElement('img');
+                    img.src = URL.createObjectURL(blob);
+
+                    const containerDiv = document.getElementById(containerId);
+                    containerDiv.innerHTML = '';
+                    containerDiv.appendChild(img.cloneNode(true));
+                }
+            })
+            .catch((error) => {
+                // Check if the fetch was aborted
+                if (error.name !== 'AbortError') {
+                    console.error(error);
+                }
+            });
+    }
+}
     
     document.getElementById('page-down-button').addEventListener('click', function() {
       adjustPageNumber(-1);

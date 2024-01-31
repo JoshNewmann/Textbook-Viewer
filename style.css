@@ -87,6 +87,16 @@ body {
     border-radius: 15px;
   }
 
+  #page-down-button,
+  #page-up-button {
+    padding-top: 5px;
+    padding-left: 6px;
+  }
+
+  #page-up-button {
+    padding-left: 8px;
+  }
+
   .left-controls, .right-controls {
     background-color: #1c1c1c;
   }
