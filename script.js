@@ -93,13 +93,13 @@ document.addEventListener('DOMContentLoaded', () => {
       handleLoadImages(pageNumber, nextPageNumber);
     });
   
-// Declare an AbortController instance
-let imageFetchController = new AbortController();
+// Define the AbortController for the current page outside the function scope
+let currentImageFetchController = new AbortController();
 
 function handleLoadImages(pageNumber, nextPageNumber) {
-    // Abort ongoing fetch requests
-    imageFetchController.abort();
-    imageFetchController = new AbortController();
+    // Abort ongoing fetch requests for the current page only
+    currentImageFetchController.abort();
+    currentImageFetchController = new AbortController();
 
     const passwordCookie = document.cookie
         .split('; ')
@@ -116,16 +116,12 @@ function handleLoadImages(pageNumber, nextPageNumber) {
 
     localStorage.setItem(bookType, currentPageNumber);
 
-    // Keep track of the current requested page number
-    const currentRequestedPage = currentPageNumber;
+    // Fetch current page image
+    fetchImage('image', currentPageNumber, currentImageFetchController.signal);
+    // Fetch next page image
+    fetchImage('image2', nextPage, null);
 
-    fetchImages('image', currentPageNumber);
-    fetchImages('image2', nextPage);
-
-    function fetchImages(containerId, pageNum) {
-        // Create a new AbortSignal for this fetch request
-        const imageFetchSignal = imageFetchController.signal;
-
+    function fetchImage(containerId, pageNum, signal) {
         fetch('https://textbookapi.quinquadcraft.org/getpage', {
                 method: 'POST',
                 headers: {
@@ -136,7 +132,7 @@ function handleLoadImages(pageNumber, nextPageNumber) {
                     page: `page${pageNum}`,
                     bookType,
                 }),
-                signal: imageFetchSignal // Pass the signal to the fetch request
+                signal: signal // Pass the signal to the fetch request
             })
             .then((response) => {
                 if (response.status === 401) {
@@ -148,15 +144,12 @@ function handleLoadImages(pageNumber, nextPageNumber) {
                 }
             })
             .then((blob) => {
-                // Check if the fetched page matches the current requested page
-                if (pageNum.toString() === currentRequestedPage.toString()) {
-                    const img = document.createElement('img');
-                    img.src = URL.createObjectURL(blob);
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(blob);
 
-                    const containerDiv = document.getElementById(containerId);
-                    containerDiv.innerHTML = '';
-                    containerDiv.appendChild(img.cloneNode(true));
-                }
+                const containerDiv = document.getElementById(containerId);
+                containerDiv.innerHTML = '';
+                containerDiv.appendChild(img.cloneNode(true));
             })
             .catch((error) => {
                 // Check if the fetch was aborted
