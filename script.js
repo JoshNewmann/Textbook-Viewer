@@ -122,7 +122,7 @@ function handleLoadImages(pageNumber, nextPageNumber) {
     fetchImage('image2', nextPage, null);
 
     function fetchImage(containerId, pageNum, signal) {
-        fetch('https://textbookapi.quinquadcraft.org/getpage', {
+        fetch('https://textbookapi.joshnewman6.com/getpage', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -360,7 +360,7 @@ function handleImageClick(event) {
   var jsonData = JSON.stringify(data);
   console.log('JSON Data: ' + jsonData);
 
-  fetch('https://textbookapi.quinquadcraft.org/addcomment', {
+  fetch('https://textbookapi.joshnewman6.com/addcomment', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'
